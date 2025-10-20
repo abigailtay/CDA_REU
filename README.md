@@ -1,46 +1,45 @@
-# CDA_REU
+# JEPA Image Segmentation for Cattle Images
 
-**JEPA Image Segmentation for Cattle Images**
-
-This repository contains resources and code for applying Joint Embedding Predictive Architecture (JEPA) to the task of image segmentation with cattle images. The goal is to segment individual cattle from images using modern self-supervised learning techniques and computer vision.
+This repository contains code and resources for applying **Joint Embedding Predictive Architecture (JEPA)** to cattle image segmentation. The project explores self-supervised learning to segment individual cattle from images, aiming to improve animal monitoring and research.
 
 ## Project Overview
+- Uses **JEPA** for self-supervised feature learning from unlabeled cattle images.
+- Segments cattle silhouettes and regions for downstream health and behavior analysis.
+- Implements a three-stage pipeline: pretraining, segmentation, and evaluation.
 
-- Leverages JEPA, a self-supervised deep learning architecture, to learn useful cattle representations from unlabelled images.
-- Focuses on segmenting cattle silhouettes and parsing image regions for downstream animal health and behavior research.
-- Applies computer vision pipelines for dataset loading, image pre-processing, and mask generation on annotated cattle datasets.
+## Model Architecture & Methods
+- **Encoder:**
+  - ResNet18 and Vision Transformer (ViT) backbones are used for JEPA pretraining.
+  - The encoder learns to predict masked image representations from unmasked context, using thousands of colormap-converted depth images.
+- **Decoder:**
+  - A lightweight U-Net-style decoder is trained on a small labeled subset, mapping encoder features to segmentation masks.
+- **Ablation Study:**
+  - ResNet18-JEPA achieved high in-distribution accuracy (Dice up to 0.98, IoU 0.975), but overfit to training conditions and dropped sharply on out-of-distribution (OOD) data.
+  - ViT-JEPA required more data, but showed better OOD stability (IoU ~0.89).
+  - CBAM attention and skip connections improved generalization and fine structure recovery, but data diversity was most critical.
 
-## How It Works
-
-1. **Dataset Preparation:**
-   - Images of cattle (JPEG/PNG) are loaded and optionally augmented for robust training.
-   - Ground truth segmentation masks specify the cattle regions in each image.
-2. **Model Architecture:**
-   - Utilizes JEPA for feature learning.
-   - Segmentation head predicts pixel-level masks, locating cattle in new images.
-3. **Training & Evaluation:**
-   - Model is trained with typical image segmentation objectives (Dice, IoU, Cross-Entropy).
-   - Includes scripts for model validation and metrics visualization.
+## Training & Evaluation
+- **Objectives:** Dice, IoU, and Cross-Entropy loss for segmentation.
+- **Validation:** Results are preliminary; current models perform well on same-day test sets but generalize poorly to new environments, breeds, or lighting.
+- **Preprocessing:** Ongoing improvements in image augmentation and normalization are being tested to boost robustness.
 
 ## Features
-
-- JEPA-based learning for cattle segmentation
-- Code & scripts for training, evaluation, and prediction
-- Utilities for data loading, augmentation, and mask visualization
-- Sample annotated data and trained model checkpoints (if available)
+- JEPA-based self-supervised learning for cattle segmentation
+- Support for ResNet and ViT backbones
+- Scripts for training, evaluation, and mask visualization
+- Sample annotated data and model checkpoints (if available)
 
 ## Technologies Used
-
 - Python, PyTorch
-- JEPA model architecture
-- Computer vision libraries: OpenCV, torchvision
+- JEPA, U-Net, ResNet18, Vision Transformer (ViT)
+- OpenCV, torchvision
 
 ## Future Work
-
-- Expand dataset with more farm environments and breeds
+- Expand dataset with more farms, breeds, and time points to improve generalization
+- Enhance preprocessing and augmentation pipelines
 - Integrate instance segmentation and fine-grained mask output
-- Link segmentation to behavioral/health analysis (e.g., movement tracking)
+- Link segmentation to behavioral and health analytics
 
----
+***
 
-Please open issues or pull requests for questions and contributions.
+**Note:** Results are preliminary and subject to change as preprocessing and data diversity are improved. For questions or contributions, please open an issue or pull request.
